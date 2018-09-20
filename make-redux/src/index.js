@@ -1,16 +1,16 @@
-function createStore(stateChanger){
+function createStore(reducer){
   let state=null
   const listeners=[]
   const subscribe=(listener)=>listeners.push(listener)
   const getState=()=>state
   const dispatch=(action)=>{
-    state=stateChanger(state,action)
+    state=reducer(state,action)
     listeners.forEach((listener)=>listener())
   }
   dispatch({})
   return {getState,dispatch,subscribe}
 }
-function stateChanger(state,action){
+function reducer(state,action){
   if(!state){
     state = {
       title: {
@@ -44,7 +44,20 @@ function stateChanger(state,action){
     return state
   }
 }
-
+function themeReducer(state,action){
+  if(!state)return{
+    themeName:'Red Theme',
+    themeColor:'red'
+  }
+  switch(action.type){
+    case 'UPDATE_THEME_NAME':
+      return{...state,themeName:action.themeName}
+    case 'UPDATE_THEME_COLOR':
+      return{...state,themeColor:action.themeColor}
+    default:
+    return state
+  }
+}
 function renderApp(newAppState,oldAppState={}){
   if(newAppState===oldAppState)return
   console.log('app render...')
@@ -66,13 +79,15 @@ function renderContent(newContent, oldContent = {}) {
   contentDOM.style.color=newContent.color
 }
 
-const store=createStore(stateChanger)
+const store=createStore(reducer)
 let oldAppState=store.getState()
 store.subscribe(()=>{
   const newAppState=store.getState()
   renderApp(newAppState,oldAppState)
   oldAppState=newAppState
 })
+const themeStore=createStore(themeReducer)
+
 renderApp(store.getState()) // 首次渲染页面
 store.dispatch({ type: 'UPDATE_TITLE_TEXT', text: '《React.js 小书》' }) // 修改标题文本
 store.dispatch({ type: 'UPDATE_TITLE_COLOR', color: 'blue' }) // 修改标题颜色
