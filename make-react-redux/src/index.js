@@ -1,23 +1,11 @@
 import React,{Component} from 'react';
 import ReactDOM from 'react-dom';
-import PropTypes from 'prop-types'
 import Header from './Header'
 import Content from './Content'
+import {Provider} from 'react-redux'
+import {createStore} from 'redux'
 import './index.css';
 import registerServiceWorker from './registerServiceWorker';
-function createStore (reducer) {
-  let state = null
-  const listeners = []
-  const subscribe = (listener) => listeners.push(listener)
-  const getState = () => state
-  const dispatch = (action) => {
-    state = reducer(state, action)
-    listeners.forEach((listener) => listener())
-  }
-  dispatch({}) // 初始化 state
-  console.log(getState())
-  return { getState, dispatch, subscribe }
-}
 const themeReducer=(state,action)=>{
   if(!state)return{
     themeColor:'red'
@@ -31,12 +19,6 @@ const themeReducer=(state,action)=>{
 }
 const store=createStore(themeReducer)
 class Index extends Component{
-  static childContextTypes={
-    store:PropTypes.object
-  }
-  getChildContext(){
-    return {store}
-  }
   render(){
     return (
       <div>
@@ -46,5 +28,8 @@ class Index extends Component{
     )
   }
 }
-ReactDOM.render(<Index />, document.getElementById('root'));
+ReactDOM.render(
+<Provider store={store}>
+  < Index / >
+</Provider>, document.getElementById('root'));
 registerServiceWorker();

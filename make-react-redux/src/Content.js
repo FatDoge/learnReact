@@ -1,7 +1,7 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
 import ThemeSwitch from './ThemeSwitch'
-import {connect} from './redux-react'
+import {connect} from 'react-redux'
 class Content extends Component{
   static ptopTypes={
     store:PropTypes.object

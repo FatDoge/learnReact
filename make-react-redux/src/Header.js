@@ -1,6 +1,6 @@
 import React,{Component} from 'react'
 import PropTypes from 'prop-types'
-import {connect} from './redux-react'
+import {connect} from 'react-redux'
 class Header extends Component{
   static propTypes={
     themeColor:PropTypes.string
