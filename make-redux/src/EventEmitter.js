@@ -20,7 +20,7 @@ class EventEmitter{
   off(eventName,func){
     if(this.listeners[eventName]){
       const index = this.listeners[eventName].indexOf(func)
-      if(index!=-1){
+      if(index!==-1){
         this.listeners[eventName].splice(index,1)
       }
     }
